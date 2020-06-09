@@ -1,2 +1,4 @@
 # Default JetBrains generated files
 /.idea/*
+.vscode
+__pycache__
