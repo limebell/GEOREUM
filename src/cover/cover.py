@@ -59,12 +59,14 @@ class Cover:
             # report : [(file1, [line1, line2, ...]), (), ...]
             fn = fr.filename
             if regular_path not in fn: continue
-            lines = open(fn, 'r').readlines()
-            
-            for line_no in analysis.statements:
 
-                lo = Line(fr.filename, line_no, lines[line_no-1])
-                covered[lo.getHash()] = lo
+            with open(fn, 'r') as f:
+                lines = f.readlines()
+                for line_no in analysis.statements:
+                    lo = Line(fr.filename, line_no, lines[line_no-1])
+                    covered[lo.getHash()] = lo
+                f.close()
+            
         return covered
 
 
