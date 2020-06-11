@@ -1,4 +1,4 @@
-from src.cover.cover import Line, Cover
+from src.cover.cover import Cover
 from src.diff.hashcash import hexdigest
 import os 
 
@@ -20,3 +20,4 @@ def bar():
     assert str(covered[key]) == text.split("\n")[1]
     assert int(covered[key]) == 2
     os.remove(os.path.join(dir_path,fn))
+    

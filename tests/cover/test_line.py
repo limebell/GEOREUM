@@ -1,4 +1,4 @@
-from src.cover.cover import Line, Cover
+from src.cover.cover import Line
 
 def test_line():
     filepath = "/path/to/python/test.py"
@@ -7,3 +7,4 @@ def test_line():
     line = Line(filepath, line_no, line_text)
     assert str(line) ==  line_text[:-1]
     assert int(line) == line_no
+    
