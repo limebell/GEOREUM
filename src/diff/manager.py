@@ -4,6 +4,7 @@ from diff import Diff, DiffFormat, DiffReport, DiffError
 import hashcash as hashcash
 import os
 import glob
+import pickle
 # Manager 기능 = directory path를 입력하면, directory path가 실제 testing을 진행할 대상의 프로젝트의 디렉터리 패스고 그걸 입력하면 거기에 있는 모든 파일에 대해서 cash가 있는지 확인하고 잇으면 비교하고, 없으면 전부 newline으로 때리고, cache를 만드는 것까지 매니저의 기능이다. recursive하게 파일 뒤지고 이런걸.. 하다가 말았다. 
 
 #수요일까지 
@@ -49,6 +50,7 @@ class Manager:
         return df
 
     def analyze(self) -> DiffReport:
+        #analyzing does not update the file yet.
         """
         Diff analyzer between cache and current.
         How it works:
@@ -65,14 +67,42 @@ class Manager:
         if not os.path.isdir(self.cache_path):
             os.mkdir(self.cache_path)
 
+        #dict: key = file directory, value = hashcash list
         hashcashdic = dict()
         for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
             if os.path.isfile(filename):
                 with open(filename,'r') as file:
                     hashcashdic[filename] = hashcash.hashcash(file.readlines())
-        print(hashcashdic)
+        
+        #dict: key = file directory, value = hashcash list
+        prev_cache = pickle.load(open(self.cache_path + "/cache.pkl","rb"))
 
-        return DiffReport()
+        diff_formats = []
+        for f in hashcashdic.keys():
+            df = DiffFormat(f)
+            #if previous cache exists for the file, use Diff.analyze to find difference.
+            if f in prev_cache.keys():
+                Diff.analyze(df,hashcashdic[f],prev_cache[f])
+            
+            #if no previous cache for the file was found, add all lines to added.
+            else:
+                df.file = f
+                with open(f,'r') as fl:
+                    df.added = fl.readlines()
+            diff_formats.append(df)
+        return diff_formats
+
+    def update_cache(self) -> None:
+        hashcashdic = dict()
+        for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
+            if os.path.isfile(filename):
+                with open(filename,'r') as file:
+                    hashcashdic[filename] = hashcash.hashcash(file.readlines())
+        pickle.dump(hashcashdic,open("manager_tests/.cache/cache.pkl","wb"))
 
 m = Manager("manager_tests")
-m.analyze()
+print(m.analyze())
+m.update_cache()
+print(m.analyze())
+# li = dict()
+# pickle.dump(li, open( "manager_tests/.cache/cache.pkl", "wb" ) )
