@@ -40,6 +40,6 @@ def test_diff_analyze():
     Diff.analyze(df, hashed, cached)
 
     assert df.modified() is True
-    # assert df.added == [4]
+    assert df.added == [4]
     print(df.added)
     assert df.removed == [2]
