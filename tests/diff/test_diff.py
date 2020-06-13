@@ -40,4 +40,5 @@ def test_diff_analyze():
 
     assert df.modified() is True
     assert df.added == [4]
+    print(df.added)
     assert df.removed == [2]
