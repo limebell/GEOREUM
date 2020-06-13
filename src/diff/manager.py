@@ -23,7 +23,7 @@ class Manager:
         # todo: remove empty newlines
         # todo: remove comments
         # file_path = root is self.dir_path.
-        rel_path = self.dir_path+"./"+file_path
+        rel_path = self.dir_path + os.sep + file_path
         f = open(rel_path, 'r')
         lines = f.readlines()
 
