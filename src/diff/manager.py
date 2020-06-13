@@ -97,10 +97,3 @@ class Manager:
                 with open(filename,'r') as file:
                     hashcashdic[filename] = hashcash.hashcash(file.readlines())
         pickle.dump(hashcashdic,open("manager_tests/.cache/cache.pkl","wb"))
-
-m = Manager("manager_tests")
-print(m.analyze())
-m.update_cache()
-print(m.analyze())
-# li = dict()
-# pickle.dump(li, open( "manager_tests/.cache/cache.pkl", "wb" ) )

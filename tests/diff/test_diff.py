@@ -1,6 +1,5 @@
 from src.diff.diff import Diff, DiffFormat, DiffReport, DiffError
 from src.diff.hashcash import hashcash
-import glob
 
 
 def test_diff_format():
