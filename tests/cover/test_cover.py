@@ -12,12 +12,12 @@ def test_get_coverage_pytest():
 
     file_path = os.path.abspath(os.path.join(
         dir_path, '../../src/diff/hashcash.py'))
-    line_no = 1
-    text = "import hashlib"
+    line_no = 20
+    text = '    blake = hashlib.blake2b(target.encode("utf-8"), digest_size=DIGEST_SIZE)'
     key = hexdigest(f"{file_path}{line_no}{text}")
 
-    assert str(covered[key]) == "import hashlib"
-    assert int(covered[key]) == 1
+    assert str(covered[key]) == text
+    assert int(covered[key]) == line_no
 
 
 def test_get_coverage_unittest():
@@ -26,12 +26,13 @@ def test_get_coverage_unittest():
     covered = Cover.get_coverage(args=['unittest', fn],
                                  root_path=os.path.join(dir_path, "../../"),
                                  module_use=True)
+    
     file_path = os.path.abspath(os.path.join(
         dir_path, '../../src/diff/hashcash.py'))
-    line_no = 1
-    text = "import hashlib"
+    line_no = 20
+    text = '    blake = hashlib.blake2b(target.encode("utf-8"), digest_size=DIGEST_SIZE)'
     key = hexdigest(f"{file_path}{line_no}{text}")
 
-    assert str(covered[key]) == "import hashlib"
-    assert int(covered[key]) == 1
+    assert str(covered[key]) == text
+    assert int(covered[key]) == line_no
     # assert 3 == 4

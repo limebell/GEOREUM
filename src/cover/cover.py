@@ -23,6 +23,9 @@ class Line:
     def __int__(self):
         return self.line_no
 
+    def get_file_path(self):
+        return self.file_path
+
 
 class Cover:
 
@@ -69,14 +72,14 @@ class Cover:
 
             for fr, analysis in report:
                 # report : [(file1, [line1, line2, ...]), (), ...]
-
+                # print(vars(analysis))
                 fn = fr.filename
                 if regular_path not in fn:
                     continue
 
                 with open(fn, 'r') as f:
                     lines = f.readlines()
-                    for line_no in analysis.statements:
+                    for line_no in analysis.executed:
                         lo = Line(fr.filename, line_no, lines[line_no-1])
                         covered[lo.getHash()] = lo
                     f.close()
