@@ -1,4 +1,4 @@
-from tests.source.source00 import echo, get_pow, get_abs, fun01
+from tests.georeum.source.source import echo, get_pow, get_abs, fun01
 
 def test_echo():
 	assert echo(1)==1
