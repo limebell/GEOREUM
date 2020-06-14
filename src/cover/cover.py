@@ -72,7 +72,6 @@ class Cover:
 
             for fr, analysis in report:
                 # report : [(file1, [line1, line2, ...]), (), ...]
-                # print(vars(analysis))
                 fn = fr.filename
                 if regular_path not in fn:
                     continue
