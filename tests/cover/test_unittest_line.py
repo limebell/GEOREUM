@@ -3,6 +3,7 @@ from src.cover.cover import Line
 from src.diff.hashcash import hexdigest
 import os
 
+
 class TestLine(unittest.TestCase):
 
     def test_line(self):
@@ -12,11 +13,8 @@ class TestLine(unittest.TestCase):
         line = Line(filepath, line_no, line_text)
         line.getHash()
         self.assertEqual(str(line), line_text[:-1])
-        self.assertEqual(int(line),line_no)
+        self.assertEqual(int(line), line_no)
+
 
 if __name__ == '__main__':
     unittest.main()
-
-
-
-
