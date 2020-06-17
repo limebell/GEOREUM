@@ -1,5 +1,6 @@
 from src.cover.cover import Line
 
+
 def test_line():
     filepath = "/path/to/python/test.py"
     line_no = 112
