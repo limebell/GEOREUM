@@ -104,30 +104,29 @@ class Georeum:
 					exist = True
 					Diff.analyze(df, current_source_file.hashed, latest_source_file.hashed)
 					break
-			if exist:
-				if df.modified():
-					added = False
-					target_line_list = []
-					target_line_list.extend(df.added)
-					target_line_list.extend(df.removed)
-					for line in target_line_list:
+			if not exist:
+				continue
+			if not df.modified():
+				continue
+			else:
+				added = False
+				target_line_list = []
+				target_line_list.extend(df.added)
+				target_line_list.extend(df.removed)
+				for line in target_line_list:
+					if added:
+						break
+					for coverObject in coverObject_list:
 						if added:
 							break
-						for coverObject in coverObject_list:
+						for covered in coverObject.covered.values():
 							if added:
 								break
-							for covered in coverObject.covered.values():
-								if added:
+							if os.path.normpath(covered.file_path)==os.path.normpath(current_source_file.file_path):
+								if covered.line_no==line:
+									added = True
+									copyfile(coverObject.file_path, 'georeum_test_case/' + os.path.basename(coverObject.file_path))
 									break
-								if os.path.normpath(covered.file_path)==os.path.normpath(current_source_file.file_path):
-									if covered.line_no==line:
-										added = True
-										copyfile(coverObject.file_path, 'georeum_test_case/' + os.path.basename(coverObject.file_path))
-										break
-				else:
-					continue
-			else:
-				continue
 
 		return
 
