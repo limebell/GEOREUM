@@ -4,6 +4,7 @@ import os
 import pytest
 
 
+
 def test_get_coverage_pytest():
     fn = 'test_line.py'
     dir_path = os.path.dirname(os.path.realpath(__file__))

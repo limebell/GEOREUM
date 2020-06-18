@@ -48,7 +48,7 @@ class Cover:
 
         regular_path = os.path.abspath(root_path)
         covered = defaultdict(Line)
-
+        
         # path 에 해당하는 .py file run.
         # report 에 covered line 정보 담겨있음.
         cov = Coverage()
@@ -66,6 +66,7 @@ class Cover:
             cov.stop()
             if code_ran:
                 cov.save()
+
 
             # testcase.py args 없다고 가정.
             report = get_analysis_to_report(cov, [])
