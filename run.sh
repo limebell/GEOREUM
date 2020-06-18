@@ -5,9 +5,9 @@ case $1 in
 		if [ "$#" -eq 2 ]
 			then
 			python -c "from src.georeum.georeum import Georeum; Georeum.save(\"$2\");"
-		elif [ "$#" -eq 3 ]
+		elif [ "$#" -eq 4 ]
 			then
-			python -c "from src.georeum.georeum import Georeum; Georeum.save(\"$2\", \"$3\");"
+			python -c "from src.georeum.georeum import Georeum; Georeum.save(\"$2\", \"$3\", \"$4\");"
 		else
 			echo "Wrong argument"
 		fi
