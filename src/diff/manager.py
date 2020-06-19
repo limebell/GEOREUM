@@ -36,7 +36,7 @@ class Manager:
         # dict: key = file directory, value = hashcash list
         hashcashdic = dict()
         for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
-            if os.path.isfile(filename):
+            if os.path.isfile(filename) and os.path.splitext(filename)[-1] == ".py":
                 with open(filename, 'r') as file:
                     rel_path = os.path.relpath(filename, self.dir_path)
                     hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
@@ -63,7 +63,7 @@ class Manager:
         # dump as dictionary with its key is relative path of the file with respect to root directory
         hashcashdic = dict()
         for filename in glob.iglob(os.path.join(self.dir_path, '**/**'), recursive=True):
-            if os.path.isfile(filename):
+            if os.path.isfile(filename) and os.path.splitext(filename)[-1] == ".py":
                 with open(filename, 'r') as file:
                     rel_path = os.path.relpath(filename, self.dir_path)
                     hashcashdic[rel_path] = hashcash.hashcash(file.readlines())

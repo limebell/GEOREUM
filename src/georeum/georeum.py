@@ -16,7 +16,7 @@ class Georeum:
         self.root_directory = root_directory
         self.test_directory = test_directory
         self.cache_directory = os.path.join(root_directory, rel_cache_directory)
-        self.manager = Manager(self.test_directory, self.cache_directory)
+        self.manager = Manager(self.root_directory, self.cache_directory)
 
     @staticmethod
     def search_py_file(target_directory: str) -> list:
