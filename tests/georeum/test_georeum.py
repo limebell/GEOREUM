@@ -34,5 +34,6 @@ def test_select_test_case():
     georeum = Georeum(root_path, test_path)
     assert os.path.exists(os.path.join(cache_path, "cache.pkl"))
     assert os.path.exists(os.path.join(cache_path, "coverage.bin"))
-    assert os.path.join(test_path, "test_small.py") in georeum.select_test_case()
-    assert not (os.path.join(test_path, "test_large.py") in georeum.select_test_case())
+    selected = georeum.select_test_case()
+    assert os.path.join(test_path, "test_small.py") in selected
+    assert not (os.path.join(test_path, "test_large.py") in selected)
