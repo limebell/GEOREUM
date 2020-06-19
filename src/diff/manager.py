@@ -8,16 +8,14 @@ import pickle
 #수요일까지 
 
 class Manager:
-    def __init__(self, dir_path: str, rel_cache_path: str = "/.cache"):
+    def __init__(self, dir_path: str, rel_cache_path: str = ".cache"):
         """
         An instance of diff management module.
         :param dir_path: Absolute path of target path to analyze.
         :param rel_cache_path: Relative path of cache files. (default = ./.cache)
         """
         self.dir_path = dir_path
-        # self.cache_path = os.path.join(dir_path, rel_cache_path)
-        # 윈도우에서는 os.path.join이 이상하게 먹히네요..
-        self.cache_path = dir_path + rel_cache_path
+        self.cache_path = os.path.join(dir_path, rel_cache_path)
 
     def analyze_file(self, file_path: str) -> DiffFormat:
         # todo: remove empty newlines
@@ -72,7 +70,7 @@ class Manager:
                     hashcashdic[filename] = hashcash.hashcash(file.readlines())
         
         #dict: key = file directory, value = hashcash list
-        prev_cache = pickle.load(open(self.cache_path + "/cache.pkl","rb"))
+        prev_cache = pickle.load(open(os.path.join(self.cache_path, "cache.pkl"), "rb"))
 
         diff_formats = []
         for f in hashcashdic.keys():
@@ -95,4 +93,4 @@ class Manager:
             if os.path.isfile(filename):
                 with open(filename,'r') as file:
                     hashcashdic[filename] = hashcash.hashcash(file.readlines())
-        pickle.dump(hashcashdic,open("manager_tests/.cache/cache.pkl","wb"))
+        pickle.dump(hashcashdic,open(os.path.join(self.cache_path, "cache.pkl"), "wb"))
