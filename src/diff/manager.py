@@ -66,4 +66,7 @@ class Manager:
                 with open(filename, 'r') as file:
                     rel_path = os.path.relpath(self.dir_path, filename)
                     hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
+
+        if not os.path.isdir(self.cache_path):
+            os.mkdir(self.cache_path)
         pickle.dump(hashcashdic, open(os.path.join(self.cache_path, "cache.pkl"), "wb"))
