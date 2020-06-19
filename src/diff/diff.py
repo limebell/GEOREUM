@@ -5,8 +5,10 @@ class DiffFormat:
         self.removed = []
 
     def __repr__(self):
-        return "file: %s\nadded: %s\nremoved: %s" % \
-               (self.name, ", ".join(self.added), ", ".join(self.removed))
+        return "file: %s / added: %s / removed: %s" % \
+               (self.name,
+                ", ".join([str(i) for i in self.added]),
+                ", ".join([str(i) for i in self.removed]))
 
     def modified(self) -> bool:
         return (not self.added and not self.removed) is False
@@ -46,6 +48,9 @@ class Diff:
         hashed_index = 1
         cached_index = 1
         for cached_index in range(1, len(cached)):
+            if hashed_index >= len(hashed):
+                df.removed = df.removed + list(range(cached_index, len(cached)))
+                break
             cached_hash = cached[cached_index]
             if cached_hash == hashed[hashed_index]:
                 # line is not added nor removed
@@ -64,6 +69,6 @@ class Diff:
                     hashed_index = first + 1
 
         # new lines added at the end
-        print("number of new lines added at the end: %d" % (len(hashed) - hashed_index))
+        # print("number of new lines added at the end: %d" % (len(hashed) - hashed_index))
         df.added = df.added + ([cached_index] * (len(hashed) - hashed_index))
         return df
