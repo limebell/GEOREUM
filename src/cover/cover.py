@@ -79,9 +79,10 @@ class Cover:
 
                 with open(fn, 'r') as f:
                     lines = f.readlines()
-                    for line_no in analysis.executed:
-                        lo = Line(fr.filename, line_no, lines[line_no-1])
-                        covered[lo.getHash()] = lo
+                    if lines:
+                        for line_no in analysis.executed:
+                            lo = Line(fr.filename, line_no, lines[line_no-1])
+                            covered[lo.getHash()] = lo
                     f.close()
 
             return covered
