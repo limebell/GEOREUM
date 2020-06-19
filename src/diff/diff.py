@@ -13,8 +13,8 @@ class DiffFormat:
 
 
 class DiffReport:
-    def __init__(self):
-        self.diff_formats = []
+    def __init__(self, diff_formats):
+        self.diff_formats = diff_formats
 
     def __repr__(self):
         return "diff report\n%s" % \

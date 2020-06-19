@@ -80,14 +80,14 @@ class Manager:
             #if previous cache exists for the file, use Diff.analyze to find difference.
             if f in prev_cache.keys():
                 Diff.analyze(df,hashcashdic[f],prev_cache[f])
-            
+
             #if no previous cache for the file was found, add all lines to added.
             else:
                 df.file = f
                 with open(f,'r') as fl:
                     df.added = fl.readlines()
             diff_formats.append(df)
-        return diff_formats
+        return DiffReport(diff_formats)
 
     def update_cache(self) -> None:
         hashcashdic = dict()
