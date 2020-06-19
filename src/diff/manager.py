@@ -38,9 +38,10 @@ class Manager:
         for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
             if os.path.isfile(filename):
                 with open(filename, 'r') as file:
-                    hashcashdic[filename] = hashcash.hashcash(file.readlines())
+                    rel_path = os.path.relpath(filename, self.dir_path)
+                    hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
 
-        # dict: key = file directory, value = hashcash list
+        # dict: key = file directory (relative), value = hashcash list
         # What if cache file does not exists?
         prev_cache = pickle.load(open(os.path.join(self.cache_path, "cache.pkl"), "rb"))
 
@@ -64,7 +65,7 @@ class Manager:
         for filename in glob.iglob(os.path.join(self.dir_path, '**/**'), recursive=True):
             if os.path.isfile(filename):
                 with open(filename, 'r') as file:
-                    rel_path = os.path.relpath(self.dir_path, filename)
+                    rel_path = os.path.relpath(filename, self.dir_path)
                     hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
 
         if not os.path.isdir(self.cache_path):
