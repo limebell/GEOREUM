@@ -34,16 +34,15 @@ class Manager:
 
         if not os.path.isdir(self.cache_path):
             raise DiffError("Cache directory does not exists: %s" % self.cache_path)
-        cache = next((x for x in os.walk(self.cache_path) if x[2] == "rel_path"), None)
         df = DiffFormat(rel_path)
-        if cache is None:
-            # cache does not exists, all lines are added lines
-            df.added = list(range(1, len(lines) + 1))
-        else:
+        if rel_path in os.listdir(self.cache_path):
             # cache exists
-            cache = open(os.path.join(cache[0], cache[2]))
+            cache = open(os.path.join(self.cache_path, rel_path))
             cached = cache.readlines()
             Diff.analyze(df, hashed, cached)
+        else:
+            # cache does not exists, all lines are added lines
+            df.added = list(range(1, len(lines) + 1))
 
         return df
 
