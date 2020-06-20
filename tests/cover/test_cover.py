@@ -1,9 +1,10 @@
-from src.cover.cover import Cover
+from src.cover.cover import Cover, get_indent, get_functions
 from src.diff.hashcash import hexdigest
 import os
 import pytest
 
-
+# def test_true():
+#     assert 1 == 1
 
 def test_get_coverage_pytest():
     fn = 'test_line.py'
@@ -58,3 +59,13 @@ def test_covered_or_not():
                 with pytest.raises(TypeError):
                     covered[uncovered_key]
         f.close()
+
+def test_get_functions():
+    assert get_indent("\td") == 1, "get indent with tab failed"
+    assert get_indent("    d") == 1, "get indent with space failed,"
+
+    fn = 'test_line.py'
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    fn_path = os.path.join(dir_path, fn)
+
+    assert get_functions(fn_path)[0].name=="test_line", "get functions failed"
