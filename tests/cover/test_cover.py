@@ -66,4 +66,23 @@ def test_get_functions():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     fn_path = os.path.join(dir_path, fn)
 
-    assert get_functions(fn_path)[0].name=="test_line", "get functions failed"
+    functions = get_functions(fn_path)
+    assert functions[0].name=="test_line", "get functions failed"
+
+    covered = Cover.get_coverage(args=['pytest', os.path.join(dir_path, fn)],
+                                root_path=os.path.join(dir_path, "../../"),
+                                module_use=True)
+
+    function_covered = Cover.get_function_coverage(root_path=os.path.join(dir_path, "../../"), covered)
+
+    file_path = os.path.abspath(fn_path)
+    name = "test_line"
+    start =4
+    end = 16
+    covered_key = hexdigest(f"{file_path}{name}{start}{end}")
+    line_no = 8
+    text = "    line = Line(filepath, line_no, line_text)"
+    line_object = Line(file_path,line_no,text)
+
+    assert covered_key in function_covered.keys(), "function test_line should have been covered, but function coverage didn't catch that."
+    assert line_object in function_covered[covered_key], "function was covered, but covered lines were not classified well enough."
