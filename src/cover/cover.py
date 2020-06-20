@@ -88,7 +88,9 @@ class Line:
     def get_file_path(self):
         return self.file_path
 
+
 class Cover:
+
     @staticmethod
     def get_coverage(args: list, root_path: str, module_use=False) -> Dict[str, Line]:
         """

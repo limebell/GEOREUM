@@ -3,8 +3,6 @@ from src.diff.hashcash import hexdigest
 import os
 import pytest
 
-# def test_true():
-#     assert 1 == 1
 
 def test_get_coverage_pytest():
     fn = 'test_line.py'
