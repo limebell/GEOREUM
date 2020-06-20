@@ -1,6 +1,7 @@
 from src.cover.cover import Cover
 from src.diff.hashcash import hexdigest, hashcash
 from src.diff.diff import Diff, DiffFormat, DiffReport, DiffError
+from src.util.format import print_formatter
 import os
 from shutil import copyfile
 from pathlib import Path
@@ -104,6 +105,8 @@ class Georeum:
 					exist = True
 					Diff.analyze(df, current_source_file.hashed, latest_source_file.hashed)
 					break
+
+			print(f"[DF Test] : {current_source_file.file_path} : {df.modified()}")
 			if not exist:
 				continue
 			if not df.modified():
@@ -130,4 +133,36 @@ class Georeum:
 
 		return
 
+	@staticmethod
+	def run_test_cases(georeum_test_case_script_path : str) -> None:
+		# 1. select_test_case should done before calling this function.
+		# 2. run just selected_test_cases
+		@print_formatter
+		def run(formatting: list, test_cases : list, tester : str = 'pytest') -> None:
+			if tester == 'pytest':
+				import pytest
+				pytest.main(['-x', *test_cases])
+			elif tester == 'unittest':
+				from unittest import TestLoader, TestCase, TestResult
+				runner = TestLoader()
+				test_suite = runner.loadTestsFromTestCase(*test_cases)
+				test_result = TestResult()
+				test_suite.run(test_result)
 
+		with open(georeum_test_case_script_path, 'rb') as tcsp:
+			loaded = pickle.load(tcsp)
+			test_cases = loaded[:-1]
+			tester = loaded[-1]
+			run(test_cases, test_cases, tester = tester)
+		pass
+
+	@staticmethod
+	def run_test_cases_with_coverage_update(target_directory: str, generate_test_case : str, coverage_data: str, source_data: str) -> None:
+		# 1. select_test_case should done before calling this function.
+		# 2. run selected_test_cases by Georeum.save
+		Georeum.save(target_directory, coverage_data, source_data)
+		pass
+
+	
+
+			
