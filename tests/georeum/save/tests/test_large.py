@@ -1,4 +1,4 @@
-from tests.georeum.save.src.adder import add
+from src.adder import add
 
 
 def test_large():

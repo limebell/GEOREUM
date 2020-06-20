@@ -1,4 +1,4 @@
-from tests.georeum.select.src.adder import add
+from src.adder import add
 
 
 def test_small():
