@@ -14,6 +14,9 @@ class Line:
         self.line_no = line_no
         self.text = text[:-1]
 
+    def __repr__(self):
+        return "%s(%d): %s" % (self.file_path, self.line_no, self.text)
+
     def getHash(self):
         return hexdigest(f"{self.file_path}{self.line_no}{self.text}")
 

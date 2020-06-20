@@ -14,8 +14,10 @@ def hexdigest(target: str):
     :param target: Target string to hash of 'utf-8'.
     :return: Hexdigest value of a string.
     """
-    if not target or not isinstance(target, str):
-        raise HashError("Input should be a non-empty string.")
+    if not target:
+        return ""
+    if not isinstance(target, str):
+        raise HashError("Input should be a string but %s" % repr(target))
 
     blake = hashlib.blake2b(target.encode("utf-8"), digest_size=DIGEST_SIZE)
     return blake.hexdigest()

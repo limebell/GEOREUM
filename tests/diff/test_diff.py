@@ -20,7 +20,7 @@ def test_diff_format():
     assert df4.modified() is True
 
 
-def test_diff_analyze():
+def test_diff_analyze1():
     # Test case is modified from differ-example
     # https://docs.python.org/2.4/lib/differ-examples.html
     text1 = '''1. Beautiful is better than ugly.
@@ -32,7 +32,7 @@ def test_diff_analyze():
 3. Simple is better than complex.
 4. Complicated is better than complex.
 5. Flat is better than nested.
-'''.splitlines(1)
+'''.splitlines()
     cached = hashcash(text1)
     hashed = hashcash(text2)
     df = DiffFormat("temp")
@@ -40,5 +40,19 @@ def test_diff_analyze():
 
     assert df.modified() is True
     assert df.added == [4]
-    print(df.added)
+    assert df.removed == [2]
+
+
+def test_diff_analyze2():
+    text1 = '''This is sample text.
+This line will be removed.
+'''.splitlines()
+    text2 = '''This is sample text.
+'''.splitlines()
+    cached = hashcash(text1)
+    hashed = hashcash(text2)
+    df = DiffFormat("temp")
+    Diff.analyze(df, hashed, cached)
+
+    assert df.modified() is True
     assert df.removed == [2]

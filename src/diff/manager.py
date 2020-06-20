@@ -3,52 +3,20 @@ import src.diff.hashcash as hashcash
 import os
 import glob
 import pickle
-# Manager 기능 = directory path를 입력하면, directory path가 실제 testing을 진행할 대상의 프로젝트의 디렉터리 패스고 그걸 입력하면 거기에 있는 모든 파일에 대해서 cash가 있는지 확인하고 잇으면 비교하고, 없으면 전부 newline으로 때리고, cache를 만드는 것까지 매니저의 기능이다. recursive하게 파일 뒤지고 이런걸.. 하다가 말았다. 
 
-#수요일까지 
 
 class Manager:
-    def __init__(self, dir_path: str, rel_cache_path: str = "/.cache"):
+    def __init__(self, dir_path: str, rel_cache_path: str = ".cache"):
         """
         An instance of diff management module.
         :param dir_path: Absolute path of target path to analyze.
         :param rel_cache_path: Relative path of cache files. (default = ./.cache)
         """
         self.dir_path = dir_path
-        # self.cache_path = os.path.join(dir_path, rel_cache_path)
-        # 윈도우에서는 os.path.join이 이상하게 먹히네요..
-        self.cache_path = dir_path + rel_cache_path
-
-    def analyze_file(self, file_path: str) -> DiffFormat:
-        # todo: remove empty newlines
-        # todo: remove comments
-        # file_path = root is self.dir_path.
-        rel_path = self.dir_path + os.sep + file_path
-        f = open(rel_path, 'r')
-        lines = f.readlines()
-
-        #remove comments and blank lines (only spaces and \n)
-        lines = [l for l in lines if not l.strip().startswith("#") and l.strip()]
-
-        hashed = hashcash.hashcash(lines)
-
-        if not os.path.isdir(self.cache_path):
-            raise DiffError("Cache directory does not exists: %s" % self.cache_path)
-        cache = next((x for x in os.walk(self.cache_path) if x[2] == "rel_path"), None)
-        df = DiffFormat(rel_path)
-        if cache is None:
-            # cache does not exists, all lines are added lines
-            df.added = list(range(1, len(lines) + 1))
-        else:
-            # cache exists
-            cache = open(os.path.join(cache[0], cache[2]))
-            cached = cache.readlines()
-            Diff.analyze(df, hashed, cached)
-
-        return df
+        self.cache_path = os.path.join(dir_path, rel_cache_path)
 
     def analyze(self) -> DiffReport:
-        #analyzing does not update the file yet.
+        # analyzing does not update the file yet.
         """
         Diff analyzer between cache and current.
         How it works:
@@ -65,35 +33,41 @@ class Manager:
         if not os.path.isdir(self.cache_path):
             os.mkdir(self.cache_path)
 
-        #dict: key = file directory, value = hashcash list
+        # dict: key = file directory, value = hashcash list
         hashcashdic = dict()
         for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
-            if os.path.isfile(filename):
-                with open(filename,'r') as file:
-                    hashcashdic[filename] = hashcash.hashcash(file.readlines())
-        
-        #dict: key = file directory, value = hashcash list
-        prev_cache = pickle.load(open(self.cache_path + "/cache.pkl","rb"))
+            if os.path.isfile(filename) and os.path.splitext(filename)[-1] == ".py":
+                with open(filename, 'r') as file:
+                    rel_path = os.path.relpath(filename, self.dir_path)
+                    hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
+
+        # dict: key = file directory (relative), value = hashcash list
+        # What if cache file does not exists?
+        prev_cache = pickle.load(open(os.path.join(self.cache_path, "cache.pkl"), "rb"))
 
         diff_formats = []
         for f in hashcashdic.keys():
             df = DiffFormat(f)
-            #if previous cache exists for the file, use Diff.analyze to find difference.
+            # if previous cache exists for the file, use Diff.analyze to find difference.
             if f in prev_cache.keys():
-                Diff.analyze(df,hashcashdic[f],prev_cache[f])
-            
-            #if no previous cache for the file was found, add all lines to added.
+                Diff.analyze(df, hashcashdic[f], prev_cache[f])
+
+            # if no previous cache for the file was found, add all lines to added.
             else:
-                df.file = f
-                with open(f,'r') as fl:
-                    df.added = fl.readlines()
+                with open(os.path.join(self.dir_path, f), 'r') as fl:
+                    df.added = range(1, len(fl.readlines()))
             diff_formats.append(df)
-        return diff_formats
+        return DiffReport(diff_formats)
 
     def update_cache(self) -> None:
+        # dump as dictionary with its key is relative path of the file with respect to root directory
         hashcashdic = dict()
-        for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
-            if os.path.isfile(filename):
-                with open(filename,'r') as file:
-                    hashcashdic[filename] = hashcash.hashcash(file.readlines())
-        pickle.dump(hashcashdic,open("manager_tests/.cache/cache.pkl","wb"))
+        for filename in glob.iglob(os.path.join(self.dir_path, '**/**'), recursive=True):
+            if os.path.isfile(filename) and os.path.splitext(filename)[-1] == ".py":
+                with open(filename, 'r') as file:
+                    rel_path = os.path.relpath(filename, self.dir_path)
+                    hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
+
+        if not os.path.isdir(self.cache_path):
+            os.mkdir(self.cache_path)
+        pickle.dump(hashcashdic, open(os.path.join(self.cache_path, "cache.pkl"), "wb"))
