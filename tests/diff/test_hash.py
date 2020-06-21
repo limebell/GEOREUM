@@ -1,4 +1,4 @@
-import src.diff.hashcash as hashcash
+from musttest.diff import hashcash as hashcash
 import pytest
 import os
 

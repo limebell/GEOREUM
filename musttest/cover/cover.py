@@ -2,7 +2,7 @@ from typing import List, Dict
 from coverage.control import Coverage
 from coverage.execfile import PyRunner
 from coverage.report import get_analysis_to_report
-from src.diff.hashcash import hexdigest
+from musttest.diff.hashcash import hexdigest
 from collections import defaultdict
 from coverage.misc import NoSource
 import os

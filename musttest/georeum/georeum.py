@@ -1,5 +1,5 @@
-from src.cover.cover import Cover
-from src.diff.manager import DiffReport, Manager
+from musttest.cover.cover import Cover
+from musttest.diff.manager import DiffReport, Manager
 import os
 import pickle
 

@@ -1,6 +1,6 @@
 import unittest
-from src.cover.cover import Line
-from src.diff.hashcash import hexdigest
+from musttest.cover.cover import Line
+from musttest.diff.hashcash import hexdigest
 import os
 
 class TestLine(unittest.TestCase):
