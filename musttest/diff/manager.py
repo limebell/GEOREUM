@@ -1,5 +1,5 @@
-from src.diff.diff import Diff, DiffFormat, DiffReport, DiffError
-import src.diff.hashcash as hashcash
+from musttest.diff.diff import Diff, DiffFormat, DiffReport, DiffError
+from musttest.diff import hashcash as hashcash
 import os
 import glob
 import pickle

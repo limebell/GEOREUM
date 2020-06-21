@@ -1,5 +1,5 @@
-from src.cover.cover import Cover
-from src.diff.hashcash import hexdigest
+from musttest.cover.cover import Cover
+from musttest.diff.hashcash import hexdigest
 import os
 import pytest
 

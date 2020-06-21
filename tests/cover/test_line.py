@@ -1,4 +1,4 @@
-from src.cover.cover import Line
+from musttest.cover.cover import Line
 
 
 def test_line():

@@ -1,4 +1,4 @@
-from src.diff.manager import Manager
+from musttest.diff.manager import Manager
 import os
 
 

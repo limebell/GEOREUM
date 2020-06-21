@@ -1,5 +1,5 @@
-from src.diff.diff import Diff, DiffFormat, DiffReport, DiffError
-from src.diff.hashcash import hashcash
+from musttest.diff.diff import Diff, DiffFormat, DiffReport, DiffError
+from musttest.diff.hashcash import hashcash
 
 
 def test_diff_format():

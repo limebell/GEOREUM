@@ -1,4 +1,4 @@
-from src.georeum.georeum import Georeum
+from musttest.georeum.georeum import Georeum
 
 def test_save_coverage():
 	"""
