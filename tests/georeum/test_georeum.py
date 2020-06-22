@@ -26,6 +26,7 @@ def test_save():
     assert os.path.exists(os.path.join(cache_path, "coverage.bin"))
     assert 3 == 4
 
+
 def test_select_test_case():
     path = os.path.dirname(os.path.abspath(__file__))
     root_path = os.path.join(path, "select")
