@@ -1,6 +1,6 @@
 
 
-def print_formatter(inner_func) :
+def print_formatter(inner_func):
     def wrapper_func(formatting, *args, **kwargs):
         tmp_str = "="*102
         func_name = inner_func.__name__

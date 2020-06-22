@@ -49,7 +49,8 @@ class Diff:
         cached_index = 1
         for cached_index in range(1, len(cached)):
             if hashed_index >= len(hashed):
-                df.removed = df.removed + list(range(cached_index, len(cached)))
+                df.removed = df.removed + \
+                    list(range(cached_index, len(cached)))
                 break
             cached_hash = cached[cached_index]
             if cached_hash == hashed[hashed_index]:
@@ -59,13 +60,15 @@ class Diff:
                 # if not exist in further cached, it is added
                 # else if exist in further cached, element between them are removed
                 # todo: what if same line is added not removed?
-                first = Diff.__find_first(cached_hash, hashed, hashed_index, -1)
+                first = Diff.__find_first(
+                    cached_hash, hashed, hashed_index, -1)
                 if first == -1:
                     # was cached, but not exist
                     df.removed.append(cached_index)
                 else:
                     # new lines were added between hashed_index ~ first
-                    df.added = df.added + ([cached_index] * (first - hashed_index))
+                    df.added = df.added + \
+                        ([cached_index] * (first - hashed_index))
                     hashed_index = first + 1
 
         # new lines added at the end

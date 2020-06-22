@@ -6,4 +6,3 @@ def add(a: int, b: int) -> int:
     else:
         print("Result is too large: %d" % c)
         return -1
-

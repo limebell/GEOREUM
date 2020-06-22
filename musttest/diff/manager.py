@@ -43,7 +43,8 @@ class Manager:
 
         # dict: key = file directory (relative), value = hashcash list
         # What if cache file does not exists?
-        prev_cache = pickle.load(open(os.path.join(self.cache_path, "cache.pkl"), "rb"))
+        prev_cache = pickle.load(
+            open(os.path.join(self.cache_path, "cache.pkl"), "rb"))
 
         diff_formats = []
         for f in hashcashdic.keys():
@@ -70,4 +71,5 @@ class Manager:
 
         if not os.path.isdir(self.cache_path):
             os.mkdir(self.cache_path)
-        pickle.dump(hashcashdic, open(os.path.join(self.cache_path, "cache.pkl"), "wb"))
+        pickle.dump(hashcashdic, open(os.path.join(
+            self.cache_path, "cache.pkl"), "wb"))

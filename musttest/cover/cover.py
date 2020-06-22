@@ -70,7 +70,6 @@ class Cover:
             if code_ran:
                 cov.save()
 
-
             # testcase.py args 없다고 가정.
             report = get_analysis_to_report(cov, [])
 

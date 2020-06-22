@@ -3,6 +3,7 @@ from musttest.cover.cover import Line
 from musttest.diff.hashcash import hexdigest
 import os
 
+
 class TestLine(unittest.TestCase):
 
     def test_line(self):

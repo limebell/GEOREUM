@@ -21,7 +21,7 @@ def test_save():
     test_path = os.path.join(root_path, "tests")
     cache_path = os.path.join(root_path, ".cache")
     georeum = Georeum(root_path, test_path)
-    georeum.save() # this part not working as well.
+    georeum.save()  # this part not working as well.
     assert os.path.exists(os.path.join(cache_path, "cache.pkl"))
     assert os.path.exists(os.path.join(cache_path, "coverage.bin"))
-    assert 3==4
+    assert 3 == 4

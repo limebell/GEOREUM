@@ -8,11 +8,11 @@ def test_select_test_case():
     test_path = os.path.join(root_path, "tests")
     cache_path = os.path.join(root_path, ".cache")
     georeum = Georeum(root_path, test_path)
-    georeum.save() # stocked here and results select_test_case() not working.
+    georeum.save()  # stocked here and results select_test_case() not working.
     assert os.path.exists(os.path.join(cache_path, "cache.pkl"))
     assert os.path.exists(os.path.join(cache_path, "coverage.bin"))
     # make change to src/adder.py
-    with open(os.path.join(root_path,'src/adder.py'), 'w+') as f:
+    with open(os.path.join(root_path, 'src/adder.py'), 'w+') as f:
         f.write("""def add(a: int, b: int) -> int:
     c = a + b
     if c < 100:
