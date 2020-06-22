@@ -51,10 +51,10 @@ class Cover:
 
         regular_path = os.path.abspath(root_path)
         covered = defaultdict(Line)
-        print("[Georeum Test]lets see if it covered")
         # path 에 해당하는 .py file run.
         # report 에 covered line 정보 담겨있음.
         cov = Coverage()
+        # args = args[:1] + [root_path] + args[1:]
         runner = PyRunner(args, as_module=module_use)
         runner.prepare()
 

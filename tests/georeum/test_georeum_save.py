@@ -21,19 +21,7 @@ def test_save():
     test_path = os.path.join(root_path, "tests")
     cache_path = os.path.join(root_path, ".cache")
     georeum = Georeum(root_path, test_path)
-    georeum.save()
+    georeum.save() # this part not working as well.
     assert os.path.exists(os.path.join(cache_path, "cache.pkl"))
     assert os.path.exists(os.path.join(cache_path, "coverage.bin"))
-
-
-def test_select_test_case():
-    path = os.path.dirname(os.path.abspath(__file__))
-    root_path = os.path.join(path, "select")
-    test_path = os.path.join(root_path, "tests")
-    cache_path = os.path.join(root_path, ".cache")
-    georeum = Georeum(root_path, test_path)
-    assert os.path.exists(os.path.join(cache_path, "cache.pkl"))
-    assert os.path.exists(os.path.join(cache_path, "coverage.bin"))
-    selected = georeum.select_test_case()
-    assert os.path.join(test_path, "test_small.py") in selected
-    assert not (os.path.join(test_path, "test_large.py") in selected)
+    assert 3==4
