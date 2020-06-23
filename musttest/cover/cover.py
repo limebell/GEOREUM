@@ -80,7 +80,7 @@ class Cover:
                 if regular_path not in fn:
                     continue
 
-                with open(fn, 'r') as f:
+                with open(fn, 'r', encoding="UTF8") as f:
                     lines = f.readlines()
                     if lines:
                         for line_no in analysis.executed:
