@@ -37,7 +37,7 @@ class Manager:
         hashcashdic = dict()
         for filename in glob.iglob(self.dir_path + '**/**', recursive=True):
             if os.path.isfile(filename) and os.path.splitext(filename)[-1] == ".py":
-                with open(filename, 'r') as file:
+                with open(filename, 'r', encoding="UTF8") as file:
                     rel_path = os.path.relpath(filename, self.dir_path)
                     hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
 
@@ -55,7 +55,7 @@ class Manager:
 
             # if no previous cache for the file was found, add all lines to added.
             else:
-                with open(os.path.join(self.dir_path, f), 'r') as fl:
+                with open(os.path.join(self.dir_path, f), 'r', encoding="UTF8") as fl:
                     df.added = range(1, len(fl.readlines()))
             diff_formats.append(df)
         return DiffReport(diff_formats)
@@ -65,7 +65,7 @@ class Manager:
         hashcashdic = dict()
         for filename in glob.iglob(os.path.join(self.dir_path, '**/**'), recursive=True):
             if os.path.isfile(filename) and os.path.splitext(filename)[-1] == ".py":
-                with open(filename, 'r') as file:
+                with open(filename, 'r', encoding="UTF8") as file:
                     rel_path = os.path.relpath(filename, self.dir_path)
                     hashcashdic[rel_path] = hashcash.hashcash(file.readlines())
 

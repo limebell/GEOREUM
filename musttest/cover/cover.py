@@ -78,7 +78,7 @@ class Cover:
                 fn = fr.filename
                 if regular_path not in fn:
                     continue
-                
+
                 with open(fn, 'r', encoding="UTF8") as f:
                     lines = f.readlines()
                     if lines:
