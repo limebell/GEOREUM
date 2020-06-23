@@ -1,8 +1,8 @@
 from musttest.cover.cover import Cover
 from musttest.diff.manager import DiffReport, Manager
+from musttest.util.format import unittest_formatter
 import os
 import pickle
-
 
 class CoverObject:
     # TODO delete this class and change src.cover.cover
@@ -67,8 +67,14 @@ class Georeum:
         covered_list = []
         for test_file in test_file_list:
             # 3. get coverage for each file
-            covered = Cover.get_coverage(
-                args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+            is_unittest = False if unittest_formatter(test_file, self.root_directory)[-1] == "." else True
+            if not is_unittest:
+                covered = Cover.get_coverage(
+                    args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+            else:
+                covered = Cover.get_coverage(
+                    args=['unittest', unittest_formatter(test_file, self.root_directory)], root_path=self.root_directory, module_use=True)
+
             covered_list.append(CoverObject(test_file, covered))
 
         # 4. save coverage object list to data
@@ -135,14 +141,30 @@ class Georeum:
             open(os.path.join(self.cache_directory, "coverage.bin"), 'rb'))
 
         # 3. traverse self.selected and update Coverage
+
         for test_file in self.selected:
-            covered = Cover.get_coverage(
-                args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+            is_unittest = False if unittest_formatter(test_file, self.root_directory)[-1] == "." else True
+            if not is_unittest:
+                covered = Cover.get_coverage(
+                    args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+            else:
+                covered = Cover.get_coverage(
+                    args=['unittest', unittest_formatter(test_file, self.root_directory)], root_path=self.root_directory, module_use=True)
+            
             for i, co in enumerate(coverd_object_list):
                 if co.get_file_path() == test_file:
                     updated.append(i)
             coverd_object_list.append(CoverObject(test_file, covered))
             ran.append(test_file)
+
+        # for test_file in self.selected:
+        #     covered = Cover.get_coverage(
+        #         args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+        #     for i, co in enumerate(coverd_object_list):
+        #         if co.get_file_path() == test_file:
+        #             updated.append(i)
+        #     coverd_object_list.append(CoverObject(test_file, covered))
+        #     ran.append(test_file)
 
         # 4. old CoverObject remove
         for i in sorted(updated, reverse=True):

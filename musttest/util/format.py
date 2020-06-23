@@ -11,3 +11,17 @@ def print_formatter(inner_func):
             print(item)
         inner_func(*args, **kwargs)
     return wrapper_func
+
+
+def unittest_formatter(test_file_path: str, root_path: str):
+    test_file_rel_path = test_file_path.replace(root_path,'')
+    module_name = ""
+    with open(test_file_path, 'r',  encoding="UTF8") as test:
+        line = test.readline()
+        while line:
+            if line.strip() and line.strip()[0] != "#" and 'class' in line.lower():
+                module_name = line.split("(")[0].split("class ")[-1]
+                break
+            line = test.readline()
+    test_file_rel_path = test_file_rel_path.split(".py")[0] + "/" + module_name
+    return test_file_rel_path.replace("/", ".")
