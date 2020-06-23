@@ -114,6 +114,7 @@ class Georeum:
                 selected_tests.append(cover_object.file_path)
 
         self.selected = selected_tests
+        print(self.selected)
         return selected_tests
 
     def test_run(self):
