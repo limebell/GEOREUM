@@ -10,6 +10,9 @@ class CoverObject:
         self.file_path = file_path
         self.covered = covered
 
+    def get_file_path(self):
+        return self.file_path
+
 
 class Georeum:
     def __init__(self, root_directory: str, test_directory: str, rel_cache_directory: str = ".cache"):
@@ -21,8 +24,10 @@ class Georeum:
         """
         self.root_directory = root_directory
         self.test_directory = test_directory
-        self.cache_directory = os.path.join(root_directory, rel_cache_directory)
+        self.cache_directory = os.path.join(
+            root_directory, rel_cache_directory)
         self.manager = Manager(self.root_directory, self.cache_directory)
+        self.selected = None
 
     @staticmethod
     def search_py_file(target_directory: str) -> list:
@@ -38,7 +43,8 @@ class Georeum:
             for filename in filenames:
                 full_filename = os.path.join(target_directory, filename)
                 if os.path.isdir(full_filename):
-                    target_file_list.extend(Georeum.search_py_file(full_filename))
+                    target_file_list.extend(
+                        Georeum.search_py_file(full_filename))
                 else:
                     ext = os.path.splitext(full_filename)[-1]
                     if ext == '.py':
@@ -61,7 +67,8 @@ class Georeum:
         covered_list = []
         for test_file in test_file_list:
             # 3. get coverage for each file
-            covered = Cover.get_coverage(args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+            covered = Cover.get_coverage(
+                args=['pytest', test_file], root_path=self.root_directory, module_use=True)
             covered_list.append(CoverObject(test_file, covered))
 
         # 4. save coverage object list to data
@@ -94,7 +101,8 @@ class Georeum:
         # TODO should manage dir_path for real tool release
 
         # get latest code coverage
-        cover_object_list = pickle.load(open(os.path.join(self.cache_directory, "coverage.bin"), 'rb'))
+        cover_object_list = pickle.load(
+            open(os.path.join(self.cache_directory, "coverage.bin"), 'rb'))
 
         # find diff of all update code
         # TODO: this does not covers the case where modified lines are at the edge of the coverage
@@ -105,4 +113,42 @@ class Georeum:
             if self.__contains_line(cover_object, diff_report):
                 selected_tests.append(cover_object.file_path)
 
+        self.selected = selected_tests
+        print(self.selected)
         return selected_tests
+
+    def test_run(self):
+        """
+        Runs test cases that are selected
+        :return: A list of test cases ran
+        """
+        # ran : test file ran
+        # updated : updated CoverObject
+        ran = []
+        updated = []
+
+        # 1. hash latest update code and save
+        self.manager.update_cache()
+
+        # 2. get latest code coverage
+        coverd_object_list = pickle.load(
+            open(os.path.join(self.cache_directory, "coverage.bin"), 'rb'))
+
+        # 3. traverse self.selected and update Coverage
+        for test_file in self.selected:
+            covered = Cover.get_coverage(
+                args=['pytest', test_file], root_path=self.root_directory, module_use=True)
+            for i, co in enumerate(coverd_object_list):
+                if co.get_file_path() == test_file:
+                    updated.append(i)
+            coverd_object_list.append(CoverObject(test_file, covered))
+            ran.append(test_file)
+
+        # 4. old CoverObject remove
+        for i in sorted(updated, reverse=True):
+            del coverd_object_list[i]
+
+        # 5. save new coverage object list to data
+        pickle.dump(coverd_object_list,
+                    open(os.path.join(self.cache_directory, "coverage.bin"), 'wb'))
+        return ran

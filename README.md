@@ -6,11 +6,13 @@ Automated selection of test cases with emphasis on amended fragments.
 
 # How to run
 - save coverage & source file
-	- ./run.sh save {test case directory} : generates "georeum_coverage.bin", "georeum_source.bin"
-	- ./run.sh save {test case directory} {result coverage file name} {result source file name}
+	- ./run.sh save {project_root_path} {test_path} : generates ".cache/coverage.bin", ".cache/cache.pkl"
 
 - select test case
-	- ./run.sh generate {coverage file} {source file}
+	- ./run.sh generate {project_root_path} {test_path} : returns test cases to be executed
+
+- select test case and run
+	- ./run.sh execute {project_root_path} {test_path} : run test cases which is get from "generate" command
 
 - example
 	- copy 'source.py_before' to 'source.py' in 'GEOREUM/tests/georeum/source/'
