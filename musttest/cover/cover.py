@@ -4,7 +4,7 @@ from coverage.execfile import PyRunner
 from coverage.report import get_analysis_to_report
 from musttest.diff.hashcash import hexdigest
 from collections import defaultdict
-from coverage.misc import NoSource
+from coverage.misc import NoSource, CoverageException
 import os
 
 
@@ -72,19 +72,21 @@ class Cover:
 
             # testcase.py args 없다고 가정.
             report = get_analysis_to_report(cov, [])
+            try:
+                for fr, analysis in report:
+                    # report : [(file1, [line1, line2, ...]), (), ...]
+                    fn = fr.filename
+                    if regular_path not in fn:
+                        continue
 
-            for fr, analysis in report:
-                # report : [(file1, [line1, line2, ...]), (), ...]
-                fn = fr.filename
-                if regular_path not in fn:
-                    continue
-
-                with open(fn, 'r', encoding="UTF8") as f:
-                    lines = f.readlines()
-                    if lines:
-                        for line_no in analysis.executed:
-                            lo = Line(fr.filename, line_no, lines[line_no-1])
-                            covered[lo.getHash()] = lo
-                    f.close()
+                    with open(fn, 'r', encoding="UTF8") as f:
+                        lines = f.readlines()
+                        if lines:
+                            for line_no in analysis.executed:
+                                lo = Line(fr.filename, line_no, lines[line_no-1])
+                                covered[lo.getHash()] = lo
+                        f.close()
+            except CoverageException:
+                print("There is no Test ran")
 
             return covered
